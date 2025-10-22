@@ -109,3 +109,6 @@ export function ModernFooter() {
     </footer>
   )
 }
+
+export { ModernFooter as Footer };       // named alias
+export default ModernFooter;             // optional: default export too
