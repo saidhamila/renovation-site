@@ -94,8 +94,8 @@ export default function QuiSommesNousPage() {
   ]
 
   const stats = [
-    { number: 15, suffix: "+", label: "Années d'expérience" },
-    { number: 80, suffix: "+", label: "Projets réalisés" },
+    { number: 7, suffix: "+", label: "Années d'expérience" },
+    { number: 3700, suffix: "+", label: "Projets réalisés" },
     { number: 98, suffix: "%", label: "Clients satisfaits" },
     { number: 25, suffix: "", label: "Artisans qualifiés" },
   ]
@@ -153,7 +153,7 @@ export default function QuiSommesNousPage() {
 
             {/* Subtitle */}
             <p className={`text-xl md:text-2xl lg:text-3xl text-gray-200 max-w-4xl mx-auto leading-relaxed mb-16 transition-all duration-1000 delay-300 ${isHeroVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}>
-              Depuis plus de 15 ans, nous transformons vos projets de rénovation en réalité avec passion et expertise.
+              Depuis plus de 7 ans, nous transformons vos projets de rénovation en réalité avec passion et expertise.
             </p>
           </div>
         </div>
@@ -198,7 +198,7 @@ export default function QuiSommesNousPage() {
                 {/* Card */}
                 <Card className="relative bg-white/5 backdrop-blur-2xl border border-white/10 shadow-2xl hover:bg-white/10 hover:border-white/20 transition-all duration-500 h-full group-hover:shadow-4xl rounded-3xl overflow-hidden">
                   {/* Gradient Border Effect */}
-                  <div className={`absolute inset-0 bg-gradient-to-r ${value.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} style={{ mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'xor', WebkitMaskComposite: 'xor', padding: '2px' }} />
+                  <div className={`absolute inset-0 bg-gradient-to-r ${value.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} style={{ mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)', maskComposite: 'xor', WebkitMaskComposite: 'xor', padding: '3px' }} />
                   
                   <CardHeader className="relative z-10 text-center pt-12 pb-6">
                     {/* Icon Container */}
@@ -238,10 +238,10 @@ export default function QuiSommesNousPage() {
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
             {stats.map((stat, i) => {
               const count = useCountUp(stat.number, 3, isStatsVisible)
-              
+
               return (
                 <div
                   key={i}
@@ -253,9 +253,9 @@ export default function QuiSommesNousPage() {
                   <div className="relative">
                     {/* Glowing Background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    
+
                     {/* Card */}
-                    <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-white/20 transition-all duration-500 shadow-xl hover:shadow-2xl">
+                    <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-12 hover:bg-white/10 hover:border-white/20 transition-all duration-500 shadow-xl hover:shadow-2xl">
                       {/* Number */}
                       <div className="text-4xl md:text-6xl lg:text-7xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text mb-4 tabular-nums group-hover:scale-110 transition-transform duration-300">
                         {count}{stat.suffix}

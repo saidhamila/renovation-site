@@ -7,10 +7,12 @@ import { Hero3DScene } from "./Hero3DScene"
 import { RobotSpline } from "./RobotSpline"
 import Link from "next/link"
 import TextType from "./TextType"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export function ModernHeroSection() {
   const [isVisible, setIsVisible] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
+  const isMobile = useIsMobile()
 
   // Delay animation
   useEffect(() => {
@@ -44,9 +46,11 @@ export function ModernHeroSection() {
       </div>
 
       {/* Robot Spline Background */}
-      <div className="absolute inset-0 opacity-30">
-        <RobotSpline />
-      </div>
+      {!isMobile && (
+        <div className="absolute inset-0 opacity-30">
+          <RobotSpline />
+        </div>
+      )}
 
       {/* Overlay gradient */}
       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-transparent to-slate-900/60 z-10" />
