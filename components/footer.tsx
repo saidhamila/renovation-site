@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import Link from "next/link"
 import { Mail, Phone, MapPin, Globe } from "lucide-react"
 
 export function ModernFooter() {
@@ -21,51 +22,22 @@ export function ModernFooter() {
             {/* Left section with enhanced logo */}
             <div className="flex flex-col items-center justify-center text-center lg:text-left space-y-6 lg:space-y-8">
               {/* Logo */}
-              <div className="relative flex flex-col items-center space-y-4">
-                <div className="w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 relative flex items-center justify-center">
+              <Link href="/" className="relative flex flex-col items-center space-y-4 group cursor-pointer">
+                <div className="relative">
                   {/* Enhanced logo with 3D effect */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 rounded-full blur-xl" />
-
-            <svg
-  width="300"
-  height="300"
-  viewBox="0 0 300 300"
-  className="relative w-full h-full"
->
-  {/* Building with enhanced shadows */}
-  <defs>
-    <linearGradient id="buildingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stopColor="#0891b2" />
-      <stop offset="100%" stopColor="#0e7490" />
-    </linearGradient>
-  </defs>
-
-  {/* Building body */}
-  <rect x="50" y="150" width="200" height="100" fill="url(#buildingGrad)" rx="4" />
-  <polygon points="40,150 95,80 150,150" fill="url(#buildingGrad)" />
-  <polygon points="130,150 185,80 240,150" fill="url(#buildingGrad)" />
-
-  {/* Windows with glow */}
-  <rect x="80" y="180" width="26" height="70" fill="#38bdf8" rx="3" />
-  <rect x="115" y="170" width="22" height="22" fill="#38bdf8" rx="3" />
-  <rect x="145" y="170" width="22" height="22" fill="#38bdf8" rx="3" />
-  <rect x="180" y="180" width="26" height="70" fill="#38bdf8" rx="3" />
-</svg>
-
-
-                  {/* Animated tools */}
-                  <div className="absolute top-2 left-4 sm:top-4 sm:left-8 animate-pulse">
-                    <div className="w-4 h-4 sm:w-6 sm:h-6 bg-white rounded-full flex items-center justify-center">
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 bg-cyan-400 rounded-full" />
-                    </div>
-                  </div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 blur-xl rounded-lg scale-110 group-hover:scale-125 transition-transform duration-300" />
+                  <img
+                    src="/images/flash-services-logo.png"
+                    alt="Flash Services 78 Logo"
+                    className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 object-contain group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
 
                 <div>
-                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 tracking-tight">Flash Services 78</h1>
-                  <p className="text-cyan-200 text-xs sm:text-sm font-bold tracking-widest uppercase">Rénovation Tous Corps d'État</p>
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white mb-2 tracking-tight group-hover:text-cyan-200 transition-colors duration-300">Flash Services 78</h1>
+                  <p className="text-cyan-200 text-xs sm:text-sm font-bold tracking-widest uppercase group-hover:text-cyan-300 transition-colors duration-300">Rénovation Tous Corps d'État</p>
                 </div>
-              </div>
+              </Link>
             </div>
 
             {/* Right section with contact info */}
