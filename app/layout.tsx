@@ -8,6 +8,7 @@ import "./globals.css"
 import { Header } from "@/components/header"
 import { ModernFooter } from "@/components/footer"
 import { Toaster } from "@/components/ui/toaster"
+import { ConditionalHomeButton } from "@/components/ConditionalHomeButton"
 
 export const metadata: Metadata = {
   title: "Flash Services 78 - Rénovation Tous Corps d'État | Boulogne-Billancourt",
@@ -22,12 +23,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Flash Services 78 - Rénovation Tous Corps d'État",
     description: "Expert en rénovation tous corps d'état à Boulogne-Billancourt. Devis gratuit.",
-    url: "https://www.flashservices78.fr",
+    url: "https://www.flashservices78.fr/",
     siteName: "Flash Services 78",
     locale: "fr_FR",
     type: "website",
-  },
-    generator: 'v0.app'
+  }
 }
 
 export default function RootLayout({
@@ -39,6 +39,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Header />
+        <ConditionalHomeButton />
         <Suspense fallback={null}>{children}</Suspense>
         <ModernFooter />
         <Toaster />

@@ -1,28 +1,28 @@
 "use client"
 
-import { Header } from "@/components/header"
-import { ModernFooter } from "@/components/footer"
+import { useState, useEffect, useRef } from "react"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import Link from "next/link"
-import { useEffect, useRef, useState } from "react"
 
-// Helper function to generate slugs
 const generateSlug = (text: string): string => {
   return text
     .toLowerCase()
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/[^\w-]+/g, '') // Remove all non-word chars
-    .replace(/--+/g, '-') // Replace multiple hyphens with single hyphen
-    .replace(/^-+/, '') // Trim hyphens from start
-    .replace(/-+$/, '') // Trim hyphens from end
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '')
 }
 
 export default function RealisationsPage() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null)
+  const [showAll, setShowAll] = useState(false)
   const headerRef = useRef<HTMLDivElement>(null)
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([])
+  const itemRefs = useRef<(HTMLElement | null)[]>([])
   const [headerVisible, setHeaderVisible] = useState(false)
+  const [visibleItems, setVisibleItems] = useState<boolean[]>([])
 
   const projects = [
     {
@@ -79,30 +79,95 @@ export default function RealisationsPage() {
       description: "Rénovation totale d'un duplex avec optimisation des espaces.",
       slug: generateSlug("Duplex Moderne"),
     },
+    {
+      title: "Appartement Standing",
+      location: "Paris 8ème",
+      type: "Rénovation Luxe",
+      duration: "4 mois",
+      image: "/placeholder.svg",
+      description: "Rénovation haut de gamme d'un appartement de prestige près des Champs-Élysées.",
+      slug: generateSlug("Appartement Standing"),
+    },
+    {
+      title: "Maison de Ville",
+      location: "Versailles",
+      type: "Rénovation Complète",
+      duration: "6 mois",
+      image: "/placeholder.svg",
+      description: "Restauration complète d'une maison de ville avec jardin et dépendances.",
+      slug: generateSlug("Maison de Ville"),
+    },
+    {
+      title: "Penthouse Parisien",
+      location: "Paris 17ème",
+      type: "Aménagement Luxe",
+      duration: "5 mois",
+      image: "/placeholder.svg",
+      description: "Aménagement d'un penthouse avec terrasse panoramique et vue sur la Tour Eiffel.",
+      slug: generateSlug("Penthouse Parisien"),
+    },
+    {
+      title: "Studio Artistique",
+      location: "Montmartre, Paris 18ème",
+      type: "Transformation",
+      duration: "3 mois",
+      image: "/placeholder.svg",
+      description: "Transformation d'un ancien atelier d'artiste en espace de vie moderne et lumineux.",
+      slug: generateSlug("Studio Artistique"),
+    },
+    {
+      title: "Résidence Familiale",
+      location: "Saint-Cloud",
+      type: "Extension & Rénovation",
+      duration: "7 mois",
+      image: "/placeholder.svg",
+      description: "Agrandissement et rénovation complète d'une résidence avec piscine et jardin paysager.",
+      slug: generateSlug("Residence Familiale"),
+    },
+    {
+      title: "Hôtel Particulier",
+      location: "Paris 7ème",
+      type: "Restauration Patrimoine",
+      duration: "8 mois",
+      image: "/placeholder.svg",
+      description: "Restauration d'un hôtel particulier classé avec respect du patrimoine architectural.",
+      slug: generateSlug("Hotel Particulier"),
+    },
   ]
 
-  // Initialize visibleItems based on the number of projects
-  const [visibleItems, setVisibleItems] = useState<boolean[]>(Array(projects.length).fill(true))
+  // Display only first 6 projects initially
+  const displayedProjects = showAll ? projects : projects.slice(0, 6)
+  const hasMoreProjects = projects.length > 6
 
   useEffect(() => {
-    // Header observer
+    setVisibleItems(Array(displayedProjects.length).fill(false))
+  }, [displayedProjects.length])
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  useEffect(() => {
     const headerObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           setHeaderVisible(true)
         }
       },
-      { threshold: 0.3 },
+      { threshold: 0.3 }
     )
 
     if (headerRef.current) {
       headerObserver.observe(headerRef.current)
     }
 
-    // Items observers
-    const observers = itemRefs.current.map((ref, index) => {
+    // Clean up old observers
+    const oldObservers = itemRefs.current.map((ref, index) => {
       if (!ref) return null
-
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -113,92 +178,237 @@ export default function RealisationsPage() {
             })
           }
         },
-        { threshold: 0.3 },
+        { threshold: 0.2 }
       )
-
       observer.observe(ref)
       return observer
     })
 
     return () => {
       headerObserver.disconnect()
-      observers.forEach((observer) => observer?.disconnect())
+      oldObservers.forEach((observer) => observer?.disconnect())
     }
-  }, [])
+  }, [displayedProjects.length])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0f172a] via-[#1e1b4b] to-[#0f172a]" >
- 
-      <main>
-        <section className="py-16 md:py-24">
-          <div className="container px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative overflow-hidden">
+      {/* Animated gradient orbs */}
+      <div 
+        className="absolute w-[800px] h-[800px] rounded-full bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-3xl animate-pulse"
+        style={{
+          top: '10%',
+          left: '10%',
+          animation: 'float 20s ease-in-out infinite',
+        }}
+      />
+      <div 
+        className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-r from-sky-500/20 to-cyan-500/20 blur-3xl animate-pulse"
+        style={{
+          bottom: '10%',
+          right: '10%',
+          animation: 'float 15s ease-in-out infinite reverse',
+        }}
+      />
+      
+      {/* Mouse follower gradient */}
+      <div
+        className="pointer-events-none fixed w-96 h-96 rounded-full opacity-20 blur-3xl transition-all duration-300 ease-out"
+        style={{
+          background: 'radial-gradient(circle, rgba(56, 189, 248, 0.4) 0%, transparent 70%)',
+          left: mousePosition.x - 192,
+          top: mousePosition.y - 192,
+        }}
+      />
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(30px, -30px) rotate(120deg); }
+          66% { transform: translate(-20px, 20px) rotate(240deg); }
+        }
+      `}</style>
+
+      <main className="relative z-10">
+        <section className="py-20 md:py-32">
+          <div className="container px-4 mx-auto">
+            {/* Header with stunning animation */}
             <div
               ref={headerRef}
-              className={`text-center space-y-4 mb-16 transition-all duration-1000 ${
-                headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              className={`text-center space-y-6 mb-20 transition-all duration-1000 ${
+                headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
               }`}
             >
-              <h1 className="text-4xl md:text-5xl font-bold text-balance text-white">Nos Réalisations</h1>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto text-white">
-                Découvrez quelques-uns de nos projets récents qui témoignent de notre savoir-faire et de notre
-                engagement qualité.
+              <div className="inline-block">
+                <Badge className="px-6 py-2 text-sm font-semibold bg-gradient-to-r from-sky-500 to-cyan-500 border-0 text-white shadow-lg shadow-sky-500/50 animate-pulse">
+                  Portfolio
+                </Badge>
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-cyan-200 leading-tight animate-fade-in">
+                Nos Réalisations
+                <span className="block text-3xl md:text-5xl mt-4 bg-gradient-to-r from-sky-400 to-cyan-400 bg-clip-text">
+                  D'Exception
+                </span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
+                Découvrez nos projets les plus prestigieux qui incarnent l'excellence,
+                <br className="hidden md:block" />
+                l'innovation et le savoir-faire artisanal français.
               </p>
+
+              {/* Decorative line */}
+              <div className="flex items-center justify-center gap-4 pt-4">
+                <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-sky-500 to-transparent"></div>
+                <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse"></div>
+                <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-sky-500 to-transparent"></div>
+              </div>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {projects.map((project, index) => (
-                <Link href={`/realisations/${project.slug}`} key={index}>
-                  <Card
-                    ref={(el) => { itemRefs.current[index] = el; }}
-                    className={`overflow-hidden hover:shadow-lg transition-all duration-700 hover:scale-105 ${
-                      visibleItems[index] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                    }`}
-                    style={{ transitionDelay: `${index * 100}ms` }}
-                  >
-                    <div className="aspect-video overflow-hidden">
+            {/* Projects Grid with advanced animations */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+              {displayedProjects.map((project, index) => (
+                <a
+                  key={index}
+                  href={`/realisations/${project.slug}`}
+                  ref={(el) => { itemRefs.current[index] = el }}
+                  className={`group transition-all duration-700 block ${
+                    visibleItems[index] ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+                  }`}
+                  style={{ transitionDelay: `${index * 150}ms` }}
+                  onMouseEnter={() => setHoveredCard(index)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                >
+                  <Card className="overflow-hidden bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-slate-700/50 backdrop-blur-sm hover:border-sky-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-sky-500/20 hover:-translate-y-2 cursor-pointer">
+                    {/* Image container with overlay effects */}
+                    <div className="relative aspect-video overflow-hidden">
                       <img
                         src={project.image || "/placeholder.svg"}
                         alt={project.title}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                        className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110 group-hover:rotate-1"
                       />
+                      
+                      {/* Gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500"></div>
+                      
+                      {/* Animated corner accent */}
+                      <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-sky-500/30 to-transparent transition-all duration-500 ${hoveredCard === index ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}></div>
+                      
+                      {/* Shine effect on hover */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                      </div>
                     </div>
-                    <CardContent className="p-6">
-                      <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <Badge
-                            variant="secondary"
-                            className="hover:bg-primary hover:text-white transition-colors duration-300"
-                          >
-                            {project.type}
-                          </Badge>
-                          <span className="text-sm text-muted-foreground">{project.duration}</span>
-                        </div>
-                        <h3 className="text-xl font-semibold hover:text-primary transition-colors duration-300">
+
+                    <CardContent className="p-6 space-y-4 relative">
+                      {/* Glowing line */}
+                      <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-sky-500 via-cyan-500 to-sky-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                      
+                      <div className="flex items-center justify-between">
+                        <Badge className="px-3 py-1 bg-gradient-to-r from-sky-600 to-cyan-600 text-white border-0 shadow-lg shadow-sky-500/30 group-hover:shadow-sky-500/50 transition-all duration-300">
+                          {project.type}
+                        </Badge>
+                        <span className="text-sm text-gray-400 font-medium flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          {project.duration}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-sky-400 group-hover:to-cyan-400 transition-all duration-300">
                           {project.title}
                         </h3>
-                        <p className="text-sm text-muted-foreground">{project.location}</p>
-                        <p className="text-sm">{project.description}</p>
+                        <p className="text-sm text-sky-300 font-medium flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          {project.location}
+                        </p>
+                      </div>
+
+                      <p className="text-gray-300 leading-relaxed line-clamp-3">
+                        {project.description}
+                      </p>
+
+                      {/* View project button */}
+                      <div className="pt-2">
+                        <button className="w-full py-3 px-6 bg-gradient-to-r from-sky-600 to-cyan-600 text-white font-semibold rounded-lg opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 hover:shadow-lg hover:shadow-sky-500/50 flex items-center justify-center gap-2">
+                          Voir le projet
+                          <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                        </button>
                       </div>
                     </CardContent>
                   </Card>
-                </Link>
+                </a>
               ))}
             </div>
 
-            <div className="text-center mt-16">
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
-                >
-                  Voir plus de réalisations
-                </Button>
-              </Link>
+            {/* CTA Section with stunning design */}
+            <div className="text-center mt-24">
+              {hasMoreProjects && !showAll && (
+                <div className="inline-block p-1 rounded-2xl bg-gradient-to-r from-sky-600 via-cyan-600 to-sky-600 animate-gradient">
+                  <div className="bg-slate-900 rounded-2xl px-12 py-8">
+                    <p className="text-gray-300 mb-6 text-lg">
+                      Vous avez un projet en tête ?
+                    </p>
+                    <Button
+                      size="lg"
+                      onClick={() => setShowAll(true)}
+                      className="bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-700 hover:to-cyan-700 text-white px-10 py-6 text-lg font-bold rounded-xl shadow-2xl shadow-sky-500/50 hover:shadow-sky-500/70 hover:scale-105 transition-all duration-300 border-0"
+                    >
+                      <span className="flex items-center gap-3">
+                        Découvrir Plus de Projets
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+              )}
+              
+              {showAll && (
+                <div className="inline-block p-1 rounded-2xl bg-gradient-to-r from-sky-600 via-cyan-600 to-sky-600 animate-gradient">
+                  <div className="bg-slate-900 rounded-2xl px-12 py-8">
+                    <p className="text-gray-300 mb-6 text-lg">
+                      Un projet de rénovation en tête ?
+                    </p>
+                    <a href="/contact">
+                      <Button
+                        size="lg"
+                        className="bg-gradient-to-r from-sky-600 to-cyan-600 hover:from-sky-700 hover:to-cyan-700 text-white px-10 py-6 text-lg font-bold rounded-xl shadow-2xl shadow-sky-500/50 hover:shadow-sky-500/70 hover:scale-105 transition-all duration-300 border-0"
+                      >
+                        <span className="flex items-center gap-3">
+                          Contactez-nous
+                          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </span>
+                      </Button>
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
       </main>
-    
+
+      <style jsx>{`
+        @keyframes gradient {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+      `}</style>
     </div>
   )
 }

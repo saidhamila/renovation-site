@@ -68,7 +68,7 @@ export function ModernHeroSection() {
       </div>
 
       {/* Content */}
-      <div className="relative z-20 container px-4 py-16 md:py-24 min-h-screen flex items-center">
+      <div className="relative z-20 container px-4 pt-20 pb-16 md:py-24 min-h-screen flex items-center">
         <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
           {/* Left column */}
           <div
@@ -81,7 +81,7 @@ export function ModernHeroSection() {
                 <span className="text-cyan-300 text-sm font-medium">Expert en Rénovation</span>
               </div>
 
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-tight">
                 <span className="block text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text">
                   <TextType
                     text={["Flash Services78"]}

@@ -88,9 +88,11 @@ export default function RenovationEnergetiquePage() {
             <p className="text-xl text-gray-300 mb-8">Réduisez vos factures d'énergie et augmentez le confort de votre habitat</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-cyan-600 hover:bg-cyan-700 text-white">
-                <Link href="/devis-travaux" className="flex items-center">Demander un audit</Link>
+                <Link href="/devis-travaux" className="flex items-center">Demander un devis gratuit </Link>
               </Button>
-              <Button size="lg" variant="outline" className="border-white/20 ">Découvrir les aides</Button>
+              <Link href="realisations">
+              <Button size="lg" variant="outline" className="border-white/20 ">Voir nos réalisations</Button>
+            </Link>
             </div>
           </div>
         </section>
