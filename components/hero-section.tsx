@@ -77,7 +77,7 @@ export function ModernHeroSection() {
             }`}
           >
             <div className="space-y-6">
-              <div className="inline-block px-4 py-2 bg-cyan-500/20 backdrop-blur-sm rounded-full border border-cyan-400/30">
+              <div className="mt-8 sm:mt-0 inline-block px-4 py-2 bg-cyan-500/20 backdrop-blur-sm rounded-full border border-cyan-400/30">
                 <span className="text-cyan-300 text-sm font-medium">Expert en Rénovation</span>
               </div>
 
@@ -85,7 +85,7 @@ export function ModernHeroSection() {
                 <span className="block text-transparent bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text">
                   <TextType
                     text={["Flash Services78"]}
-                    typingSpeed={75}
+                    typingSpeed={185}
                     pauseDuration={1500}
                     showCursor={true}
                     cursorCharacter="|"
