@@ -24,7 +24,7 @@ export function CTASection() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-20 md:py-32 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 overflow-hidden"
+      className="relative py-20 md:py-32 bg-gradient-to-br from-indigo-950 via-blue-950 to-purple-950 overflow-hidden"
     >
       {/* Animated glowing blobs */}
       <div className="absolute top-[-100px] left-[-100px] w-72 h-72 bg-blue-500/30 rounded-full blur-3xl animate-blob"></div>
