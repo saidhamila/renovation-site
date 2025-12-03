@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     // Email content
     const mailOptions = {
       from: `"Flash Services" <${process.env.SMTP_USER}>`,
-      to: 'ayoubmbrouk3@gmail.com',
+      to: 'contact@flashservices78.fr',
       subject: 'Nouvelle demande de devis - Flash Services',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
