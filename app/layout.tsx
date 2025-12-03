@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   creator: "Flash Services 78",
   publisher: "Flash Services 78",
   robots: "index, follow",
+  icons: {
+    icon: "/images/flash-services-logo.png",
+  },
   openGraph: {
     title: "Flash Services 78 - Rénovation Tous Corps d'État",
     description: "Expert en rénovation tous corps d'état à Boulogne-Billancourt. Devis gratuit.",
